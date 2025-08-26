@@ -1,0 +1,29 @@
+# Example environment configuration
+# Copy this file to .envrc and update with your actual credentials
+
+# Azure SQL Database connections
+export AZURE_SQL_SALES_CONN="mssql+pyodbc://user:password@server.database.windows.net/sales_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_FINANCE_CONN="mssql+pyodbc://user:password@server.database.windows.net/finance_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_OPERATIONS_CONN="mssql+pyodbc://user:password@server.database.windows.net/operations_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_INVENTORY_CONN="mssql+pyodbc://user:password@server.database.windows.net/inventory_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_CUSTOMER_CONN="mssql+pyodbc://user:password@server.database.windows.net/customer_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_SUPPORT_CONN="mssql+pyodbc://user:password@server.database.windows.net/support_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_AUDIT_CONN="mssql+pyodbc://user:password@server.database.windows.net/audit_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_MARKETING_CONN="mssql+pyodbc://user:password@server.database.windows.net/marketing_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_HR_CONN="mssql+pyodbc://user:password@server.database.windows.net/hr_db?driver=ODBC+Driver+18+for+SQL+Server"
+export AZURE_SQL_ANALYTICS_CONN="mssql+pyodbc://user:password@server.database.windows.net/analytics_db?driver=ODBC+Driver+18+for+SQL+Server"
+
+# API Credentials - Zendesk example
+export ZENDESK_SUBDOMAIN="your-company"
+export ZENDESK_EMAIL="your-email@company.com"
+export ZENDESK_API_TOKEN="your-api-token-here"
+
+# Destination Configuration
+export GCS_BUCKET_URL="gs://your-data-lake-bucket/extracts/"
+export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/service-account-key.json"
+
+# Optional: Default settings
+export DEFAULT_FILE_FORMAT="parquet"
+export DEFAULT_LOAD_TYPE="incremental"
+export DEFAULT_SCHEMA="dbo"
+export ENVIRONMENT="development"

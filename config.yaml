@@ -1,0 +1,20 @@
+# Simple Azure SQL to GCS Extraction Configuration
+# Functional, DRY configuration that follows the original logic
+
+# Azure SQL Database Settings
+azure_sql:
+  connection_string: "${AZURE_SQL_CONNECTION_STRING}"
+  schema: "dbo"
+
+# GCS Destination Settings  
+gcs:
+  bucket_url: "${GCS_BUCKET_URL}"
+
+# Extraction Settings
+load_type: "replace"  # or "merge" for incremental
+file_format: "parquet"
+
+# Environment Variables Required:
+# export AZURE_SQL_CONNECTION_STRING="mssql+pyodbc://user:pass@server/db?driver=ODBC+Driver+18+for+SQL+Server"
+# export GCS_BUCKET_URL="gs://my-bucket/azure-sql-extracts/"
+# export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"

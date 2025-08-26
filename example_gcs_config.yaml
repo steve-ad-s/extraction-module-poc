@@ -1,0 +1,34 @@
+# Example Configuration - Azure SQL to GCS Parquet Pipeline
+# This shows how to configure the functional DLT pipeline for filesystem destination
+
+# GCS Destination Settings
+bucket_url: "gs://my-data-lake/azure-sql-extracts/"  # Your GCS bucket
+dataset_prefix: "azure_data"  # Folder prefix for each database
+file_format: "parquet"  # Always use Parquet for best performance
+
+# Database configurations (minimal example)
+databases:
+  # Production Sales Database (Incremental)
+  - name: "sales"
+    connection_string: "${AZURE_SQL_SALES_CONN}"
+    load_type: "incremental"
+    schema: "dbo"
+    # tables: ["customers", "orders"]  # Uncomment to load specific tables only
+    
+  # Marketing Analytics (Full refresh daily)  
+  - name: "marketing"
+    connection_string: "${AZURE_SQL_MARKETING_CONN}" 
+    load_type: "full"
+    schema: "marketing"
+    tables: ["campaigns", "leads", "conversions"]  # Only specific tables
+
+# Result: Creates these GCS paths:
+# gs://my-data-lake/azure-sql-extracts/azure_data_sales/customers/load_123.file_001.parquet
+# gs://my-data-lake/azure-sql-extracts/azure_data_sales/orders/load_123.file_001.parquet  
+# gs://my-data-lake/azure-sql-extracts/azure_data_marketing/campaigns/load_124.file_001.parquet
+# etc.
+
+# Environment Variables Required:
+# export AZURE_SQL_SALES_CONN="mssql+pyodbc://user:pass@server/sales_db?driver=ODBC+Driver+18+for+SQL+Server"
+# export AZURE_SQL_MARKETING_CONN="mssql+pyodbc://user:pass@server/marketing_db?driver=ODBC+Driver+18+for+SQL+Server"
+# export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account-key.json"

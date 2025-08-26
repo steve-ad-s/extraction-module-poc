@@ -1,0 +1,176 @@
+[project]
+name = "azure-sql-extractor"
+version = "1.0.0"
+description = "Simple, functional Azure SQL to GCS data extraction pipeline using DLT"
+requires-python = ">=3.9.2"
+
+dependencies = [
+    "dlt[filesystem,sql_database]>=1.15.0",
+    "pyyaml>=6.0.1",
+    "pyarrow>=12.0.0",  # Required for Parquet files
+    "fsspec[gcs]>=2023.1.0",  # GCS filesystem support
+    "sqlalchemy>=1.4.28,<2.0",  # Required for SQL database sources (Airflow compatible)
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.8",
+]
+airflow = [
+    "apache-airflow>=2.8.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+fix = true
+
+[tool.ruff.lint]
+# Enable the specified rule categories
+select = [
+    "E",   # pycodestyle errors  
+    "F",   # pyflakes
+    "B",   # flake8-bugbear
+    "C",   # flake8-comprehensions
+    "A",   # flake8-builtins
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "YTT", # flake8-2020
+    "S",   # flake8-bandit
+    "BLE", # flake8-blind-except
+    "FBT", # flake8-boolean-trap
+    "C4",  # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "T10", # flake8-debugger
+    "EM",  # flake8-errmsg
+    "FA",  # flake8-future-annotations
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "G",   # flake8-logging-format
+    "INP", # flake8-no-pep420
+    "PIE", # flake8-pie
+    "T20", # flake8-print
+    "PT",  # flake8-pytest-style
+    "Q",   # flake8-quotes
+    "RSE", # flake8-raise
+    "RET", # flake8-return
+    "SLF", # flake8-self
+    "SIM", # flake8-simplify
+    "TID", # flake8-tidy-imports
+    "TCH", # flake8-type-checking
+    "ARG", # flake8-unused-arguments
+    "PTH", # flake8-use-pathlib
+    "ERA", # eradicate
+    "PD",  # pandas-vet
+    "PGH", # pygrep-hooks
+    "PL",  # pylint
+    "TRY", # tryceratops
+    "NPY", # numpy
+    "RUF", # ruff-specific rules
+]
+
+ignore = [
+    "E501",  # line too long (handled by line-length)
+    "S101",  # assert statements (OK for tests)
+    "D100",  # missing docstring in public module
+    "D101",  # missing docstring in public class
+    "D102",  # missing docstring in public method
+    "D103",  # missing docstring in public function
+    "D104",  # missing docstring in public package
+    "D105",  # missing docstring in magic method
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101",   # assert statements
+    "PLR2004", # magic value comparison
+    "S106",   # hardcoded password
+]
+"__init__.py" = [
+    "F401",   # unused import
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["azure_sql_pipeline"]
+force-sort-within-sections = true
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "double"
+multiline-quotes = "double"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "dlt.*",
+    "yaml.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
+
+[tool.coverage.run]
+source = ["azure_sql_pipeline"]
+omit = [
+    "tests/*",
+    "*/migrations/*",
+    "venv/*",
+    ".venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+show_missing = true
+skip_covered = false
+
+[dependency-groups]
+test = [
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+    "pytest-mock>=3.14.1",
+]
